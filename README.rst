@@ -22,19 +22,21 @@ Usage
 
    import h11
    import trio
-   from trio_h11 import TrioH11Connection
+   from trio_h11 import TrioH11Stream
 
    async def main():
        stream = await trio.open_tcp_stream("example.com", 80)
-       conn = TrioH11Connection(stream, h11.CLIENT)
-       await conn.send_event(h11.Request(method="GET", target="/",
+       conn = TrioH11Stream(stream, is_server=False)
+       await conn.send(h11.Request(method="GET", target="/",
            headers=[("Host", "example.com"), ("Connection", "close")]))
-       await conn.send_event(h11.EndOfMessage())
-       while True:
-           event = await conn.receive_event()
-           print(event)
-           if isinstance(event, h11.EndOfMessage):
-               break
+       await conn.send(h11.EndOfMessage())
+       try:
+           async for event in conn:
+               print(event)
+               if isinstance(event, h11.EndOfMessage):
+                   break
+       finally:
+           await conn.aclose()
 
    trio.run(main)
 
