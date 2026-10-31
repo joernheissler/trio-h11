@@ -43,6 +43,9 @@ Usage
 Development
 -----------
 
+See the `contributor documentation <docs/contributing.rst>`__ for docstring
+style conventions.
+
 ::
 
    pip install -e . pytest pytest-trio

@@ -9,3 +9,4 @@ Glue between `trio <https://trio.readthedocs.io/>`__ and
 
    usage
    api
+   contributing

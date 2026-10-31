@@ -1,4 +1,6 @@
-"""Adapt Trio byte streams to the h11 HTTP/1.1 state machine."""
+"""
+Adapt Trio byte streams to the h11 HTTP/1.1 state machine.
+"""
 
 from __future__ import annotations
 
@@ -16,7 +18,9 @@ DEFAULT_INCOMPLETE_EVENT_SIZE = 16 * 1024
 
 
 class TrioH11Stream(trio.abc.AsyncResource):
-    """Adapt a Trio byte stream to send and receive h11 events."""
+    """
+    Adapt a Trio byte stream to send and receive h11 events.
+    """
 
     stream: trio.abc.Stream
     recv_size: int
@@ -33,7 +37,8 @@ class TrioH11Stream(trio.abc.AsyncResource):
         recv_size: int = DEFAULT_RECEIVE_SIZE,
         clean_shutdown: bool = True,
     ) -> None:
-        """Create an event stream around a Trio stream.
+        """
+        Create an event stream around a Trio stream.
 
         Args:
             stream: The bidirectional byte stream to adapt.
@@ -53,11 +58,15 @@ class TrioH11Stream(trio.abc.AsyncResource):
         self._finalized = False
 
     def __aiter__(self) -> TrioH11Stream:
-        """Return this object as an asynchronous iterator of h11 events."""
+        """
+        Return this object as an asynchronous iterator of h11 events.
+        """
         return self
 
     async def __anext__(self) -> h11.Event | type[h11.PAUSED]:
-        """Receive the next event, or stop after the stream has been finalized."""
+        """
+        Receive the next event, or stop after the stream has been finalized.
+        """
         if self._finalized:
             raise StopAsyncIteration
 
@@ -65,35 +74,48 @@ class TrioH11Stream(trio.abc.AsyncResource):
 
     @property
     def our_state(self) -> type[h11._util.Sentinel]:
-        """Return h11's state for events sent by this endpoint."""
+        """
+        Return h11's state for events sent by this endpoint.
+        """
         return self._h11.our_state
 
     @property
     def their_state(self) -> type[h11._util.Sentinel]:
-        """Return h11's state for events received from the peer."""
+        """
+        Return h11's state for events received from the peer.
+        """
         return self._h11.their_state
 
     @property
     def they_are_waiting_for_100_continue(self) -> bool:
-        """Whether the peer is waiting for a ``100 Continue`` response."""
+        """
+        Whether the peer is waiting for a ``100 Continue`` response.
+        """
         return self._h11.they_are_waiting_for_100_continue
 
     @property
     def trailing_data(self) -> tuple[bytes, bool]:
-        """Return bytes following the current message and whether the peer closed."""
+        """
+        Return bytes following the current message and whether the peer closed.
+        """
         return self._h11.trailing_data
 
     def start_next_cycle(self) -> None:
-        """Start the next HTTP message cycle when h11 permits it."""
+        """
+        Start the next HTTP message cycle when h11 permits it.
+        """
         self._h11.start_next_cycle()
 
     @property
     def finalized(self) -> bool:
-        """Whether this adapter can no longer use its underlying stream."""
+        """
+        Whether this adapter can no longer use its underlying stream.
+        """
         return self._finalized
 
     async def send(self, event: h11.Event) -> None:
-        """Send an h11 event to the peer.
+        """
+        Send an h11 event to the peer.
 
         Args:
             event: The h11 event to serialize and send.
@@ -112,7 +134,8 @@ class TrioH11Stream(trio.abc.AsyncResource):
             raise
 
     async def recv(self) -> h11.Event | type[h11.PAUSED]:
-        """Receive the next h11 event, reading bytes as needed.
+        """
+        Receive the next h11 event, reading bytes as needed.
 
         Returns:
             The next h11 event, or h11's ``PAUSED`` sentinel.
@@ -130,7 +153,8 @@ class TrioH11Stream(trio.abc.AsyncResource):
         return cast(h11.Event | type[h11.PAUSED], event)
 
     async def aclose(self) -> None:
-        """Close the adapter and its byte stream, sending a clean shutdown if possible.
+        """
+        Close the adapter and its byte stream, sending a clean shutdown if possible.
 
         The underlying stream is left open only when ``finalize_switch`` has already
         transferred ownership to another protocol.
@@ -147,7 +171,8 @@ class TrioH11Stream(trio.abc.AsyncResource):
             await self.stream.aclose()
 
     def finalize_switch(self) -> tuple[trio.abc.Stream, bytes]:
-        """Transfer the stream after a successful protocol switch.
+        """
+        Transfer the stream after a successful protocol switch.
 
         The adapter is finalized and will no longer close the underlying stream.
         Returns the stream and trailing bytes that the new protocol must process.
