@@ -48,9 +48,10 @@ style conventions.
 
 ::
 
-   pip install -e . pytest pytest-trio coverage
+   pip install -e . pytest pytest-trio coverage mypy
    coverage run -m pytest
    coverage report
+   mypy --strict
 
 Pull requests must keep test coverage at 100%.
 

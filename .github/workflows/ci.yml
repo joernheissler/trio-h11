@@ -22,9 +22,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - run: pip install -e . pytest pytest-trio coverage
+      - run: pip install -e . pytest pytest-trio coverage mypy
       - run: coverage run -m pytest
       - run: coverage report
+      - run: mypy --strict
 
   docs:
     runs-on: ubuntu-latest

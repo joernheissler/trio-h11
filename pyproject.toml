@@ -51,6 +51,9 @@ source = ["trio_h11"]
 fail_under = 100
 show_missing = true
 
+[tool.mypy]
+files = ["src"]
+
 [tool.black]
 line-length = 96
 

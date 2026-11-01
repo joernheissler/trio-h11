@@ -12,17 +12,7 @@ import trio
 __version__ = "0.1.0"
 
 H11_ROLE = type[h11.CLIENT] | type[h11.SERVER]
-H11_STATE = (
-    type[h11.IDLE]
-    | type[h11.SEND_RESPONSE]
-    | type[h11.SEND_BODY]
-    | type[h11.DONE]
-    | type[h11.MUST_CLOSE]
-    | type[h11.CLOSED]
-    | type[h11.ERROR]
-    | type[h11.MIGHT_SWITCH_PROTOCOL]
-    | type[h11.SWITCHED_PROTOCOL]
-)
+H11_STATE = type[object]
 
 #: Default maximum number of bytes read from the underlying stream at once.
 DEFAULT_RECEIVE_SIZE = 64 * 1024
@@ -225,7 +215,7 @@ class TrioH11Stream(trio.abc.AsyncResource):
         """
         h11.CLIENT if this is a client; h11.SERVER if this is a server.
         """
-        return cast(H11_ROLE, self._h11.our_role)
+        return self._h11.our_role
 
     @property
     def their_role(self) -> H11_ROLE:
