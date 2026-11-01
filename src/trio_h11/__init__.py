@@ -12,7 +12,17 @@ import trio
 __version__ = "0.1.0"
 
 H11_ROLE = type[h11.CLIENT] | type[h11.SERVER]
-H11_STATE = type[object]
+H11_STATE = (
+    type[h11.IDLE]
+    | type[h11.SEND_RESPONSE]
+    | type[h11.SEND_BODY]
+    | type[h11.DONE]
+    | type[h11.MUST_CLOSE]
+    | type[h11.CLOSED]
+    | type[h11.ERROR]
+    | type[h11.MIGHT_SWITCH_PROTOCOL]  # type: ignore[name-defined]
+    | type[h11.SWITCHED_PROTOCOL]
+)
 
 #: Default maximum number of bytes read from the underlying stream at once.
 DEFAULT_RECEIVE_SIZE = 64 * 1024
