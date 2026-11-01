@@ -1,0 +1,61 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trio-h11"
+dynamic = ["version"]
+description = "Glue between trio streams and the h11 HTTP/1.1 protocol library"
+readme = "README.rst"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+authors = [{ name = "Jörn Heissler" }]
+keywords = ["trio", "h11", "http", "async"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Trio",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Internet :: WWW/HTTP",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "h11",
+    "trio",
+]
+
+[project.urls]
+Homepage = "https://github.com/joernheissler/trio-h11"
+Documentation = "https://trio-h11.1e8.de/"
+Source = "https://github.com/joernheissler/trio-h11"
+Issues = "https://github.com/joernheissler/trio-h11/issues"
+
+[tool.hatch.version]
+path = "src/trio_h11/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/trio_h11"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+trio_mode = true
+
+[tool.coverage.run]
+branch = true
+source = ["trio_h11"]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+
+[tool.mypy]
+files = ["src"]
+
+[tool.black]
+line-length = 96
+
+[tool.isort]
+profile = "black"
