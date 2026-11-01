@@ -9,7 +9,7 @@ description = "Glue between trio streams and the h11 HTTP/1.1 protocol library"
 readme = "README.rst"
 license = "MIT"
 license-files = ["LICENSE"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [{ name = "Jörn Heissler" }]
 keywords = ["trio", "h11", "http", "async"]
 classifiers = [
@@ -42,3 +42,9 @@ packages = ["src/trio_h11"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 trio_mode = true
+
+[tool.black]
+line-length = 96
+
+[tool.isort]
+profile = "black"
