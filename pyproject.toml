@@ -43,6 +43,14 @@ packages = ["src/trio_h11"]
 testpaths = ["tests"]
 trio_mode = true
 
+[tool.coverage.run]
+branch = true
+source = ["trio_h11"]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+
 [tool.black]
 line-length = 96
 

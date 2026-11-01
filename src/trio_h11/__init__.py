@@ -225,7 +225,7 @@ class TrioH11Stream(trio.abc.AsyncResource):
         """
         h11.CLIENT if this is a client; h11.SERVER if this is a server.
         """
-        return  self._h11.our_role
+        return cast(H11_ROLE, self._h11.our_role)
 
     @property
     def their_role(self) -> H11_ROLE:

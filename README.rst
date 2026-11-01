@@ -48,8 +48,11 @@ style conventions.
 
 ::
 
-   pip install -e . pytest pytest-trio
-   pytest
+   pip install -e . pytest pytest-trio coverage
+   coverage run -m pytest
+   coverage report
+
+Pull requests must keep test coverage at 100%.
 
 License
 -------
